@@ -1,12 +1,15 @@
 #ifndef ATC_DISPLAY_H
 #define ATC_DISPLAY_H
 
-#define TC_EDIT_SEC     1
-#define TC_EDIT_MIN     2
-#define TC_EDIT_HOUR    4
-#define TC_EDIT_DAY     8
-#define TC_EDIT_MONTH  16
-#define TC_EDIT_YEAR   32
+#define ATC_EDIT_SEC    1
+#define ATC_EDIT_MIN    2
+#define ATC_EDIT_HOUR   4
+#define ATC_EDIT_DAY    8
+#define ATC_EDIT_MONTH 16
+#define ATC_EDIT_YEAR  32
+
+#define ATC_Space2 "  "
+#define ATC_Space4 "    "
 
 #include "Termo.h"
 #include <RTClib.h>
@@ -21,7 +24,7 @@ protected:
     uint16_t mCntKey1;
     uint16_t mCntKey2;
 
-    bool mYear4;
+    uint8_t mMode;
     bool mTermoDesc;
 
     bool mIsEdit;
@@ -32,22 +35,27 @@ protected:
     DateTime mNow;
     Termo mTermo;
 
-public:
     Display(uint8_t aPinKey1, uint8_t aPinKey2, uint8_t aPinTerm, uint8_t aSizeTerm=10) :
             mPinKey1(aPinKey1), mPinKey2(aPinKey2),
             mOnKey1(false), mOnKey2(false), mCntKey1(0), mCntKey2(0),
-            mYear4(true), mTermoDesc(true),
+            mMode(0), mTermoDesc(true),
             mIsEdit(false), mPosEdit(0), mCntEdit(0),
             mRtc(), mNow(), mTermo(aPinTerm, aSizeTerm)
     {}
-    virtual ~Display() = default;
+
+    virtual void nextMode() {}
+    void setMode(uint8_t aMode);
+
+public:
+    virtual ~Display() {}
+
+    static Display* make();
+    static void strNum(float num, char *buf, uint8_t len, bool sig=false, uint8_t pos=0, bool fill=true);
 
     virtual void init();
     virtual void fresh();
 
-    virtual void console();
-    virtual void draw() {}
-    virtual void clear() {}
+    virtual void draw();
 };
 
 #endif //ATC_DISPLAY_H

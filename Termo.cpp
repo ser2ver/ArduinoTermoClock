@@ -15,7 +15,7 @@ void Termo::init() {
     mNumDev = mSensors.getDeviceCount();
     mDevices = new DeviceAddress[mNumDev];
 
-    for (int i=0; i < mNumDev; ++i) {
+    for (uint8_t i=0; i < mNumDev; ++i) {
         // set the addresses we found on the bus
         if (!mSensors.getAddress(mDevices[i], i)) {
             Serial.print("Unable to find address for Device ");
@@ -43,5 +43,12 @@ void Termo::init() {
         Serial.print(" Resolution: ");
         Serial.print(mSensors.getResolution(mDevices[i]), DEC);
         Serial.println();
+    }
+}
+
+void Termo::setSize(uint8_t aSize) {
+    mSize = aSize;
+    for (uint8_t i=0; i < mNumDev; ++i) {
+        mSensors.setResolution(mDevices[i], mSize);
     }
 }
