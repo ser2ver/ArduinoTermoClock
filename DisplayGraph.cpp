@@ -3,23 +3,25 @@
 #ifdef ATC_DISPLAY_GRAPH
 
 void DisplayGraph::nextMode() {
+    if (++mMode > ATC_MODE_GRAPH2)
+        mMode = 0;
+    setMode(mMode);
+}
+
+void DisplayGraph::setMode(uint8_t aMode) {
+    Display::setMode(aMode);
     switch (mMode) {
         case ATC_MODE_GRAPH1:
-            setMode(ATC_MODE_GRAPH2);
-            mTermo.setSize(12);
+            mTermo.setSize(10);
             break;
         case ATC_MODE_GRAPH2:
         default:
-            setMode(ATC_MODE_GRAPH1);
-            mTermo.setSize(10);
+            mTermo.setSize(12);
             break;
     }
 }
 
 void DisplayGraph::drawMode1() {
-//    mGraph->drawFrame(0, 0, 128, 64);
-//    mGraph->drawLine(62, 0, 62, 62);
-
     float i;
     mGraph->drawCircle(31, 31, 31);
     mGraph->drawPixel(31, 31);
@@ -73,9 +75,6 @@ void DisplayGraph::drawMode1() {
 }
 
 void DisplayGraph::drawMode2() {
-//    mGraph->drawFrame(0, 0, 128, 64);
-//    mGraph->drawLine(64, 0, 64, 61);
-
     mGraph->setFont(u8g_font_10x20);
     if (mIsEdit && (mPosEdit & ATC_EDIT_HOUR) && (mCntEdit & 1)) {
         strcpy(mBuf+0, ATC_Space2);
@@ -140,10 +139,6 @@ void DisplayGraph::init() {
 
     // Display init
     mGraph->setRot180();
-}
-
-void DisplayGraph::fresh() {
-    Display::fresh();
 }
 
 void DisplayGraph::draw() {

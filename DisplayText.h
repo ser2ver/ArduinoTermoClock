@@ -16,6 +16,7 @@ protected:
     char mBuf[12];
 
     virtual void nextMode();
+    virtual void setMode(uint8_t aMode);
 
 public:
     DisplayText(uint8_t aPinKey1, uint8_t aPinKey2, uint8_t aPinTerm, uint8_t aSizeTerm=10) :
@@ -24,8 +25,6 @@ public:
     virtual ~DisplayText() {}
 
     virtual void init();
-    virtual void fresh();
-
     virtual void draw();
 };
 

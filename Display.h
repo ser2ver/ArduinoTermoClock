@@ -44,7 +44,7 @@ protected:
     {}
 
     virtual void nextMode() {}
-    void setMode(uint8_t aMode);
+    virtual void setMode(uint8_t aMode);
 
 public:
     virtual ~Display() {}
@@ -54,7 +54,6 @@ public:
 
     virtual void init();
     virtual void fresh();
-
     virtual void draw();
 };
 

@@ -16,6 +16,7 @@ protected:
     char mBuf[12];
 
     virtual void nextMode();
+    virtual void setMode(uint8_t aMode);
 
     void drawMode1();
     void drawMode2();
@@ -25,8 +26,6 @@ public:
     virtual ~DisplayGraph() {}
 
     virtual void init();
-    virtual void fresh();
-
     virtual void draw();
 };
 

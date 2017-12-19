@@ -3,18 +3,23 @@
 #ifdef ATC_DISPLAY_TEXT
 
 void DisplayText::nextMode() {
+    if (++mMode > ATC_MODE_TEXT2)
+        mMode = 0;
+    setMode(mMode);
+    mLcd.clear();
+}
+
+void DisplayText::setMode(uint8_t aMode) {
+    Display::setMode(aMode);
     switch (mMode) {
         case ATC_MODE_TEXT1:
-            setMode(ATC_MODE_TEXT2);
-            mTermo.setSize(12);
+            mTermo.setSize(10);
             break;
         case ATC_MODE_TEXT2:
         default:
-            setMode(ATC_MODE_TEXT1);
-            mTermo.setSize(10);
+            mTermo.setSize(12);
             break;
     }
-    mLcd.clear();
 }
 
 void DisplayText::init() {
@@ -26,10 +31,6 @@ void DisplayText::init() {
     // Display init
     mLcd.init();
     mLcd.backlight();
-}
-
-void DisplayText::fresh() {
-    Display::fresh();
 }
 
 void DisplayText::draw() {
@@ -112,13 +113,13 @@ void DisplayText::draw() {
         size = 8;
         acc  = 3;
     }
-    if (mTermo.getNumDev() > 0) {}
+    if (mTermo.getNumDev() > 0) {
         mLcd.setCursor(pos, (mTermoDesc ? 1 : 0));
         strNum(mTermo.getTermC(0), mBuf, size, true, acc, false);
         mLcd.print(mBuf);
     }
 
-    if (mTermo.getNumDev() > 1) {}
+    if (mTermo.getNumDev() > 1) {
         mLcd.setCursor(pos, (mTermoDesc ? 0 : 1));
         strNum(mTermo.getTermC(1), mBuf, size, true, acc, false);
         mLcd.print(mBuf);

@@ -4,6 +4,7 @@
 //#define ATC_DISPLAY_TEXT 1
 #define ATC_DISPLAY_GRAPH 1
 
+#define ATC_USE_EEPROM_ADDR 10
 
 #define ATC_PIN_TERMO 2  // Specify pin for Temperature sensor
 

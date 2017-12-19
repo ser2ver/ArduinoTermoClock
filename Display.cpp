@@ -2,19 +2,23 @@
 
 #if defined(ATC_DISPLAY_GRAPH)
 #include "DisplayGraph.h"
-
 #elif defined(ATC_DISPLAY_TEXT)
 #include "DisplayText.h"
-
 #else
 #include "Display.h"
+#endif
 
+#ifdef ATC_USE_EEPROM_ADDR
+#include <EEPROM.h>
 #endif
 
 const uint8_t ATC_daysInMonth [] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 void Display::setMode(uint8_t aMode) {
     mMode = aMode;
+#ifdef ATC_USE_EEPROM_ADDR
+    EEPROM.update(ATC_USE_EEPROM_ADDR, mMode);
+#endif
 }
 
 Display *Display::make() {
@@ -77,6 +81,11 @@ void Display::init() {
     pinMode(mPinKey1, INPUT);
     pinMode(mPinKey2, INPUT);
 
+#ifdef ATC_USE_EEPROM_ADDR
+    setMode(EEPROM.read(ATC_USE_EEPROM_ADDR));
+    mTermoDesc = EEPROM.read(ATC_USE_EEPROM_ADDR+1);
+#endif
+
     // Real Time Clock init
     if (!mRtc.begin()) {
         Serial.println("Couldn't find RTC");
@@ -125,6 +134,9 @@ void Display::fresh() {
     if (!mIsEdit && (((mCntKey1 == 2) && (mCntKey2 >= 2) && (mCntKey2 < 4)) ||
                      ((mCntKey1 >= 2) && (mCntKey2 == 2)))) {
         mTermoDesc = !mTermoDesc;
+#ifdef ATC_USE_EEPROM_ADDR
+        EEPROM.update(ATC_USE_EEPROM_ADDR + 1, mTermoDesc);
+#endif
     } else if (!mIsEdit && (mCntKey1 == 0) && (mCntKey2 == 2)) {
         nextMode();
     } else if (!mIsEdit && (mCntKey1 == 4) && (mCntKey2 == 0)) {
