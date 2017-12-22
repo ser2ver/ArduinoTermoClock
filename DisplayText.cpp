@@ -35,7 +35,7 @@ void DisplayText::init() {
 
 void DisplayText::draw() {
     // Draw Date
-    mLcd.setCursor(0, 0);
+    mLcd.setCursor(0, 1);
     if (mIsEdit && (mPosEdit & ATC_EDIT_DAY) && (mCntEdit & 1)) {
         mLcd.print(ATC_Space2);
     } else {
@@ -43,10 +43,10 @@ void DisplayText::draw() {
         mLcd.print(mBuf);
     }
 
-    mLcd.setCursor(2, 0);
+    mLcd.setCursor(2, 1);
     mLcd.print(".");
 
-    mLcd.setCursor(3, 0);
+    mLcd.setCursor(3, 1);
     if (mIsEdit && (mPosEdit & ATC_EDIT_MONTH) && (mCntEdit & 1)) {
         mLcd.print(ATC_Space2);
     } else {
@@ -54,10 +54,10 @@ void DisplayText::draw() {
         mLcd.print(mBuf);
     }
 
-    mLcd.setCursor(5, 0);
+    mLcd.setCursor(5, 1);
     mLcd.print(".");
 
-    mLcd.setCursor(6, 0);
+    mLcd.setCursor(6, 1);
     if (mIsEdit && (mPosEdit & ATC_EDIT_YEAR) && (mCntEdit & 1)) {
         mLcd.print((mMode == ATC_MODE_TEXT1) ? ATC_Space4 : ATC_Space2);
     } else {
@@ -71,7 +71,7 @@ void DisplayText::draw() {
     // Draw Time
     uint8_t pos = (mMode == ATC_MODE_TEXT1) ? 1 : 0;
 
-    mLcd.setCursor(pos + 0, 1);
+    mLcd.setCursor(pos + 0, 0);
     if (mIsEdit && (mPosEdit & ATC_EDIT_HOUR) && (mCntEdit & 1)) {
         mLcd.print(ATC_Space2);
     } else {
@@ -79,10 +79,10 @@ void DisplayText::draw() {
         mLcd.print(mBuf);
     }
 
-    mLcd.setCursor(pos + 2, 1);
+    mLcd.setCursor(pos + 2, 0);
     mLcd.print(":");
 
-    mLcd.setCursor(pos + 3, 1);
+    mLcd.setCursor(pos + 3, 0);
     if (mIsEdit && (mPosEdit & ATC_EDIT_MIN) && (mCntEdit & 1)) {
         mLcd.print(ATC_Space2);
     } else {
@@ -90,10 +90,10 @@ void DisplayText::draw() {
         mLcd.print(mBuf);
     }
 
-    mLcd.setCursor(pos + 5, 1);
+    mLcd.setCursor(pos + 5, 0);
     mLcd.print(":");
 
-    mLcd.setCursor(pos + 6, 1);
+    mLcd.setCursor(pos + 6, 0);
     if (mIsEdit && (mPosEdit & ATC_EDIT_SEC) && (mCntEdit & 1)) {
         mLcd.print(ATC_Space2);
     } else {
@@ -113,16 +113,20 @@ void DisplayText::draw() {
         size = 8;
         acc  = 3;
     }
+    mLcd.setCursor(pos, (mTermoDesc ? 1 : 0));
     if (mTermo.getNumDev() > 0) {
-        mLcd.setCursor(pos, (mTermoDesc ? 1 : 0));
         strNum(mTermo.getTermC(0), mBuf, size, true, acc, false);
         mLcd.print(mBuf);
+    } else {
+        mLcd.print((mMode == ATC_MODE_TEXT1) ? ATC_Space6 : ATC_Space8);
     }
 
+    mLcd.setCursor(pos, (mTermoDesc ? 0 : 1));
     if (mTermo.getNumDev() > 1) {
-        mLcd.setCursor(pos, (mTermoDesc ? 0 : 1));
         strNum(mTermo.getTermC(1), mBuf, size, true, acc, false);
         mLcd.print(mBuf);
+    } else {
+        mLcd.print((mMode == ATC_MODE_TEXT1) ? ATC_Space6 : ATC_Space8);
     }
 }
 

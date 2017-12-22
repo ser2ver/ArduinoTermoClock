@@ -10,6 +10,8 @@
 
 #define ATC_Space2 "  "
 #define ATC_Space4 "    "
+#define ATC_Space6 "      "
+#define ATC_Space8 "        "
 
 #include "Termo.h"
 #include <RTClib.h>
